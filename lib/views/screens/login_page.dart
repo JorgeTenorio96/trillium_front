@@ -30,30 +30,20 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Text(
                   'Trillium',
-                  style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 50,
-                      color: Colors.blue,
-                      fontStyle: FontStyle.italic),
+                  style: GoogleFonts.arima(fontWeight: FontWeight.w900, fontSize: 50, color: Colors.blue, fontStyle: FontStyle.italic),
                 ),
                 SizedBox(height: 60),
                 Text(
-                  'Hello there',
-                  style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 28,
-                      color: Colors.blue,
-                      fontStyle: FontStyle.italic),
+                  'Hello there!',
+                  style: GoogleFonts.arima(fontWeight: FontWeight.bold, fontSize: 28, color: Colors.blue, fontStyle: FontStyle.italic),
                 ),
                 BlocBuilder<AuthenticationBloc, AuthenticationState>(
                   builder: (context, state) {
-                    final authBloc =
-                        BlocProvider.of<AuthenticationBloc>(context);
+                    final authBloc = BlocProvider.of<AuthenticationBloc>(context);
                     if (state is AuthenticationNotAuthenticatedState) {
                       return LoginForm();
                     }
-                    if (state is AuthenticationFailureState ||
-                        state is SessionExpiredState) {
+                    if (state is AuthenticationFailureState || state is SessionExpiredState) {
                       var msg = (state as AuthenticationFailureState).message;
                       return Center(
                           child: Column(

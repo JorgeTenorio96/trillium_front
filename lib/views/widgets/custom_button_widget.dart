@@ -9,15 +9,7 @@ class CustomButton extends StatelessWidget {
   final Color textColor;
   final double? width;
   final double? height;
-  const CustomButton(
-      {super.key,
-      this.onTap,
-      required this.color,
-      this.padding,
-      required this.textColor,
-      required this.text,
-      this.width,
-      this.height});
+  const CustomButton({super.key, this.onTap, required this.color, this.padding, required this.textColor, required this.text, this.width, this.height});
 
   @override
   Widget build(BuildContext context) {
@@ -29,21 +21,13 @@ class CustomButton extends StatelessWidget {
           height: height,
           width: width,
           padding: EdgeInsets.all(12),
-          decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.grey.withOpacity(.1),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: Offset(0, 3))
-              ]),
+          decoration: BoxDecoration(color: color, boxShadow: [
+            BoxShadow(color: Colors.grey.withOpacity(.1), spreadRadius: 2, blurRadius: 5, offset: Offset(0, 3))
+          ]),
           child: Center(
               child: Text(
             '${text}',
-            style: GoogleFonts.montserrat(
-                color: textColor, fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(color: textColor, fontSize: 16, fontWeight: FontWeight.bold),
           )),
         ),
       ),

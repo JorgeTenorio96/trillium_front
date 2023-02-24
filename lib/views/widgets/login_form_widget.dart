@@ -18,9 +18,7 @@ class LoginForm extends StatelessWidget {
     final authService = getIt<JwtAuthenticationService>();
     final authBloc = BlocProvider.of<AuthenticationBloc>(context);
 
-    return BlocProvider<LoginBloc>(
-        create: (context) => LoginBloc(authBloc, authService),
-        child: SignInForm());
+    return BlocProvider<LoginBloc>(create: (context) => LoginBloc(authBloc, authService), child: SignInForm());
   }
 }
 
@@ -43,8 +41,7 @@ class _SignInFormState extends State<SignInForm> {
 
     _onLoginButtonPressed() {
       if (_key.currentState!.validate()) {
-        _loginBloc.add(LoginInWithEmailButtonPressedEvent(
-            email: _emailController.text, password: _passwordController.text));
+        _loginBloc.add(LoginInWithEmailButtonPressedEvent(email: _emailController.text, password: _passwordController.text));
       } else {
         setState(() {
           _autoValidate = true;
@@ -67,12 +64,9 @@ class _SignInFormState extends State<SignInForm> {
 
         return Form(
           key: _key,
-          autovalidateMode: _autoValidate
-              ? AutovalidateMode.always
-              : AutovalidateMode.disabled,
+          autovalidateMode: _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
           child: Column(
             children: [
-              //! Textfield para el username
               SizedBox(height: 30),
               CustomTextFormField(
                   hint: 'Username',
@@ -84,8 +78,6 @@ class _SignInFormState extends State<SignInForm> {
                     }
                     return null;
                   }),
-
-              //! Textfield para la password
               SizedBox(height: 15),
               CustomTextFormField(
                 hint: 'Password',
@@ -98,42 +90,15 @@ class _SignInFormState extends State<SignInForm> {
                   return null;
                 },
               ),
-
-              //! Login Button
               SizedBox(height: 30),
               CustomButton(
                 text: 'Login',
                 color: Colors.blue,
                 padding: 35,
                 textColor: Colors.white,
-                onTap:
-                    state is LoginLoadingState ? () {} : _onLoginButtonPressed,
+                onTap: state is LoginLoadingState ? () {} : _onLoginButtonPressed,
               ),
-
-              //! Register Text
               SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Not a member? ',
-                    style: GoogleFonts.openSans(
-                        color: Color.fromARGB(255, 114, 114, 114),
-                        fontWeight: FontWeight.w400),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/register');
-                    },
-                    child: Text(
-                      'Register now',
-                      style: GoogleFonts.openSans(
-                          color: Colors.blueAccent,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ],
-              )
             ],
           ),
         );

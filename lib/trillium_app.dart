@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_trillium/views/screens/login_page.dart';
 import 'package:flutter_trillium/views/screens/main_page.dart';
-import 'package:flutter_trillium/views/screens/register_page.dart';
 import 'package:flutter_trillium/views/views.dart';
 
 import 'bloc/authentication/authentication_bloc.dart';
@@ -35,7 +34,6 @@ class Trillium extends StatelessWidget {
       routes: {
         '/': (context) => SplashPage(),
         '/login': (context) => LoginPage(),
-        '/register': (context) => RegisterPage()
       },
       debugShowCheckedModeBanner: false,
       // home:
