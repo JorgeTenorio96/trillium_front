@@ -8,20 +8,12 @@ class CustomTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final String? Function(String?)? validator;
 
-  const CustomTextFormField(
-      {super.key,
-      required this.hint,
-      required this.obscureText,
-      this.hPadding,
-      this.validator,
-      this.errorText,
-      this.controller});
+  const CustomTextFormField({super.key, required this.hint, required this.obscureText, this.hPadding, this.validator, this.errorText, this.controller});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: hPadding == null ? 15 : hPadding!),
+      padding: EdgeInsets.symmetric(horizontal: hPadding == null ? 15 : hPadding!),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: TextFormField(
@@ -29,19 +21,11 @@ class CustomTextFormField extends StatelessWidget {
           validator: validator,
           obscureText: obscureText,
           controller: controller,
-          style: TextStyle(color: Color.fromARGB(255, 59, 59, 59)),
+          style: TextStyle(color: Colors.black),
           decoration: InputDecoration(
-              errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide:
-                      BorderSide(color: Color.fromARGB(255, 182, 88, 88))),
-              focusedErrorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide:
-                      BorderSide(color: Color.fromARGB(255, 182, 88, 88))),
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: Colors.white)),
+              errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: Colors.black)),
+              focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: Colors.black)),
+              enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: Colors.white)),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(color: Colors.grey.shade400),
