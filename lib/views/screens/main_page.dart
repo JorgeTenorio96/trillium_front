@@ -24,24 +24,12 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 0;
+  int indices = 0;
   final User user;
-  NaviBar? naviBar;
-
-  @override
-  void initState() {
-    naviBar = NaviBar(targetview: (index) {
-      setState(() {
-        _selectedIndex = index;
-      });
-    });
-    super.initState();
-  }
 
   final List<Widget> _pages = [
-    //SafeArea(minimum: const EdgeInsets.all(2), child: _HomePage()),
-    SafeArea(minimum: const EdgeInsets.all(2), child: _SettingsPage()),
-    SafeArea(minimum: const EdgeInsets.all(2), child: PostPage())
+    _PostPage(),
+    _SettingsPage(),
   ];
 
   _MainPageState(this.user);
@@ -49,86 +37,58 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        toolbarHeight: 50,
-        title: ClipRRect(
-          child: Container(
-            width: 90,
-            height: 40,
-            child: Center(
-              child: Text(
-                'Trillium',
-                style: GoogleFonts.arima(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 20,
-                    color: Colors.white,
-                    fontStyle: FontStyle.italic),
+        appBar: AppBar(
+          centerTitle: true,
+          toolbarHeight: 50,
+          title: ClipRRect(
+            child: Container(
+              width: 90,
+              height: 40,
+              child: Center(
+                child: Text(
+                  'Trillium',
+                  style: GoogleFonts.arima(fontWeight: FontWeight.w900, fontSize: 20, color: Colors.white, fontStyle: FontStyle.italic),
+                ),
               ),
             ),
           ),
+          backgroundColor: Colors.blue,
+          elevation: 2,
         ),
-        backgroundColor: Colors.blue,
-        elevation: 2,
-      ),
-      backgroundColor: Color.fromARGB(255, 236, 251, 252),
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: naviBar,
-      /*bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.blue,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-            child: GNav(
-                selectedIndex: _selectedIndex,
-                onTabChange: _navigateBottomBar,
-                backgroundColor: Colors.blue,
-                color: Color.fromARGB(150, 255, 255, 255),
-                activeColor: Colors.white,
-                gap: 10,
-                tabBackgroundColor: Color.fromARGB(120, 255, 255, 255),
-                padding: EdgeInsets.all(10),
-                tabs: [
-                  GButton(
-                    icon: Icons.image,
-                    text: 'Post',
-                  ),
-                  GButton(
-                    icon: Icons.logout,
-                    text: 'Logout',
-                  )
-                ]),
-          ),
+        backgroundColor: Color.fromARGB(255, 236, 251, 252),
+        body: IndexedStack(
+          index: indices,
+          children: _pages,
         ),
-      ),*/
-    );
-  }
-
-  void _navigateBottomBar(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+        bottomNavigationBar: BottomNavigationBar(
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home, color: Colors.black), label: 'Posts'),
+              BottomNavigationBarItem(icon: Icon(Icons.list_alt_rounded, color: Colors.black), label: 'Logout'),
+            ],
+            currentIndex: indices,
+            onTap: (int index) {
+              setState(() {
+                indices = index;
+              });
+            }));
   }
 }
 
-/*class _PostPage extends StatelessWidget {
+class _PostPage extends StatelessWidget {
   const _PostPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    final postRepo = new PostRepository();
+    return Scaffold(
+        body: BlocProvider(
       create: (_) {
-        final postRepo = new PostRepository();
-        return PostBloc(postRepository: postRepo)
-          ..add(PostFetched());
+        return PostBloc(postRepository: postRepo)..add(PostFetched());
       },
-      child: const PostList(),
-    );
+      child: Main(),
+    ));
   }
-}*/
+}
 
 class _SettingsPage extends StatelessWidget {
   const _SettingsPage({super.key});
@@ -149,7 +109,7 @@ class _SettingsPage extends StatelessWidget {
   }
 }
 
-class NaviBar extends StatefulWidget {
+/*class NaviBar extends StatefulWidget {
   final Function targetview;
   const NaviBar({Key? key, required this.targetview}) : super(key: key);
   @override
@@ -179,4 +139,4 @@ class NaviBarState extends State<NaviBar> {
           )
         ]);
   }
-}
+}*/

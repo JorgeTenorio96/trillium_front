@@ -22,8 +22,7 @@ class PostDetail extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.all(20),
-            child:
-                Image(image: NetworkImage(post.image.toString()), height: 200),
+            child: Image(image: NetworkImage(post.image.toString()), height: 500),
           ),
         ],
       )),

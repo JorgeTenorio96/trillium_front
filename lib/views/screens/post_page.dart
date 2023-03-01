@@ -43,7 +43,7 @@ class PostPage extends StatelessWidget {
   Widget build(BuildContext context) {
     int _selectedIndex = 1;
     return BlocProvider(
-      create: (context) => PostBloc(PostRepository())..add(PostFetched()),
+      create: (context) => PostBloc(postRepository: PostRepository())..add(PostFetched()),
       child: Main(),
     );
   }
@@ -80,16 +80,20 @@ class _MainState extends State<Main> {
   Widget build(BuildContext context) {
     return BlocBuilder<PostBloc, PostState>(
       builder: (context, state) {
-        return ListView.builder(
-          itemBuilder: (BuildContext context, int index) {
-            return index >= state.post.length
-                ? const BottomLoader()
-                : PostItem(post: state.post[index]);
-          },
-          itemCount:
-              state.hasReachedMax ? state.post.length : state.post.length + 1,
-          controller: _scrollController,
-        );
+        switch (state.status) {
+          case PostStatus.failure:
+            return Text("Fallo");
+          case PostStatus.initial:
+            return const Center(child: CircularProgressIndicator());
+          case PostStatus.success:
+            return ListView.builder(
+              itemBuilder: (BuildContext context, int index) {
+                return index >= state.post.length ? const BottomLoader() : PostItem(post: state.post[index]);
+              },
+              itemCount: state.hasReachedMax ? state.post.length : state.post.length + 1,
+              controller: _scrollController,
+            );
+        }
       },
     );
   }
@@ -120,15 +124,15 @@ class PostItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Material(
+
+    return SizedBox(
         child: GestureDetector(
       child: Container(
         height: 300,
         child: Card(
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             Padding(
               padding: EdgeInsets.all(20),
               child: Center(
@@ -154,8 +158,7 @@ class PostItem extends StatelessWidget {
           margin: EdgeInsets.all(10),
         ),
       ),
-      onTap: () => Navigator.push(context,
-          MaterialPageRoute(builder: (context) => PostDetail(post: post))),
+      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PostDetail(post: post))),
     ));
   }
 }

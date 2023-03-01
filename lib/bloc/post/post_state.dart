@@ -1,6 +1,10 @@
 part of 'post_bloc.dart';
 
-enum PostStatus { initial, success, failure }
+enum PostStatus {
+  initial,
+  success,
+  failure
+}
 
 class PostState extends Equatable {
   const PostState({
@@ -20,7 +24,7 @@ class PostState extends Equatable {
   }) {
     return PostState(
       status: status ?? this.status,
-      post: this.post,
+      post: post ?? this.post,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
   }
@@ -31,5 +35,9 @@ class PostState extends Equatable {
   }
 
   @override
-  List<Object> get props => [status, post, hasReachedMax];
+  List<Object> get props => [
+        status,
+        post,
+        hasReachedMax
+      ];
 }

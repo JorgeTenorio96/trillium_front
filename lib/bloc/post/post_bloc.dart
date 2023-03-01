@@ -19,24 +19,23 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 class PostBloc extends Bloc<PostEvent, PostState> {
   final PostRepository postRepository;
 
-  PostBloc(this.postRepository) : super(const PostState()) {
+  PostBloc({required this.postRepository}) : super(const PostState()) {
     on<PostFetched>(
       _onPostsFetched,
       transformer: throttleDroppable(throttleDuration),
     );
   }
 
-  Future<void> _onPostsFetched(
-      PostFetched event, Emitter<PostState> emitter) async {
+  Future<void> _onPostsFetched(PostFetched event, Emitter<PostState> emitter) async {
     if (state.hasReachedMax) return;
     try {
       if (state.status == PostStatus.initial) {
         page = 0;
         final response = await postRepository.fetchPosts(page);
-        final post = response;
+        //final post = response;
         return emitter(state.copyWith(
           status: PostStatus.success,
-          post: post.content,
+          post: response.content,
           hasReachedMax: response.totalPages! - 1 <= page,
         ));
       }
@@ -44,10 +43,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       final response = await postRepository.fetchPosts(page);
       final favPosts = response;
 
-      emitter(state.copyWith(
-          status: PostStatus.success,
-          post: List.of(state.post)..addAll(favPosts.content!),
-          hasReachedMax: response.totalPages! - 1 <= page));
+      emitter(state.copyWith(status: PostStatus.success, post: List.of(state.post)..addAll(favPosts.content!), hasReachedMax: response.totalPages! - 1 <= page));
     } catch (_) {
       emitter(state.copyWith(status: PostStatus.failure));
     }
