@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_trillium/bloc/post/post.dart';
+import 'package:flutter_trillium/data/repositories/post_repository.dart';
+import 'package:flutter_trillium/views/screens/post_page.dart';
 
 import 'package:flutter_trillium/views/widgets/custom_button_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import '../../bloc/post/post_bloc.dart';
 
 import '../../bloc/authentication/authentication_bloc.dart';
 
+import '../../models/post.dart';
 import '../../models/user.dart';
 
 class MainPage extends StatefulWidget {
@@ -21,10 +26,22 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   final User user;
+  NaviBar? naviBar;
+
+  @override
+  void initState() {
+    naviBar = NaviBar(targetview: (index) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    });
+    super.initState();
+  }
 
   final List<Widget> _pages = [
     //SafeArea(minimum: const EdgeInsets.all(2), child: _HomePage()),
-    SafeArea(minimum: const EdgeInsets.all(2), child: _SettingsPage())
+    SafeArea(minimum: const EdgeInsets.all(2), child: _SettingsPage()),
+    SafeArea(minimum: const EdgeInsets.all(2), child: PostPage())
   ];
 
   _MainPageState(this.user);
@@ -56,7 +73,8 @@ class _MainPageState extends State<MainPage> {
       ),
       backgroundColor: Color.fromARGB(255, 236, 251, 252),
       body: _pages[_selectedIndex],
-      bottomNavigationBar: Padding(
+      bottomNavigationBar: naviBar,
+      /*bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
         child: Container(
           decoration: BoxDecoration(
@@ -85,7 +103,7 @@ class _MainPageState extends State<MainPage> {
                 ]),
           ),
         ),
-      ),
+      ),*/
     );
   }
 
@@ -96,16 +114,16 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
-/*class _HomePage extends StatelessWidget {
-  const _HomePage({super.key});
+/*class _PostPage extends StatelessWidget {
+  const _PostPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) {
         final postRepo = new PostRepository();
-        return PostListBloc(recipeRepository: postRepo)
-          ..add(GetPostEvent());
+        return PostBloc(postRepository: postRepo)
+          ..add(PostFetched());
       },
       child: const PostList(),
     );
@@ -128,5 +146,37 @@ class _SettingsPage extends StatelessWidget {
         },
       ),
     );
+  }
+}
+
+class NaviBar extends StatefulWidget {
+  final Function targetview;
+  const NaviBar({Key? key, required this.targetview}) : super(key: key);
+  @override
+  State<StatefulWidget> createState() => NaviBarState();
+}
+
+class NaviBarState extends State<NaviBar> {
+  int index = 0;
+  @override
+  Widget build(BuildContext context) {
+    return BottomNavigationBar(
+        currentIndex: index,
+        onTap: (int i) {
+          setState(() {
+            index = i;
+            widget.targetview(i);
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.image),
+            label: 'Post',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.logout),
+            label: 'Logout',
+          )
+        ]);
   }
 }
